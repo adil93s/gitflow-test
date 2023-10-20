@@ -90,6 +90,8 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     needs: package
     runs-on: ubuntu-latest
+    environment:
+      name: Release Deployment
     permissions:
       packages: write
       contents: write
