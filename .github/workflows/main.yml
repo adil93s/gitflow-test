@@ -48,4 +48,4 @@ jobs:
 
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:$BRANCH_NAME --tags
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/adil93s/gitflow-test HEAD:$BRANCH_NAME --tags
