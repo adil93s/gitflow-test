@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -48,4 +50,4 @@ jobs:
 
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/adil93s/gitflow-test HEAD:$BRANCH_NAME --tags
+          git push origin HEAD:$BRANCH_NAME --tags
