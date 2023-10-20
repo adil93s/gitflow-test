@@ -1,0 +1,48 @@
+name: Angular CI
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - release/*
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Version handling logic
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          VERSION=$(node -p "require('./package.json').version")
+
+          if [[ "$BRANCH_NAME" == "master" ]]; then
+            # Increment minor version for master
+            npm version minor
+          elif [[ "$BRANCH_NAME" == "develop" ]]; then
+            # Increment prerelease version for develop
+            npm version prerelease --preid=dev
+          elif [[ "$BRANCH_NAME" =~ ^release/ ]]; then
+            # Increment patch version for release branches
+            npm version patch
+          fi
+
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git push origin HEAD:$BRANCH_NAME --tags
