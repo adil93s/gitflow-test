@@ -3,7 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
+      - master
       - develop
+      - release/*
+      - feature/*
   workflow_dispatch:
 
 jobs:
@@ -29,6 +32,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: |
+          npm install
 
       - name: Run Tests
         run: |
@@ -59,8 +66,6 @@ jobs:
             npm version minor
           elif [[ "$BRANCH_NAME" == "develop" ]]; then
             npm version prerelease --preid=dev
-          elif [[ "$BRANCH_NAME" =~ ^release/ ]]; then
-            npm version patch
           elif [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
             echo "Feature branch $BRANCH_NAME was pushed. Version remains at $VERSION."
             exit 0
@@ -82,6 +87,6 @@ jobs:
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           VERSION=$(node -p "require('./package.json').version")
 
+          npm version patch
           git checkout -b release-${VERSION} 2>/dev/null || git checkout release-${VERSION}
-
           git push origin release-${VERSION}
