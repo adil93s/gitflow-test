@@ -5,25 +5,25 @@ on:
     branches:
       - master
       - develop
-      - release/*
       - feature/*
+  workflow_dispatch:
 
 jobs:
-  versioning:
+  notify:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: write
+    steps:
+      - run: echo "New changes detected in develop. You can now manually trigger a release deployment from the GitHub Actions tab."
 
+  versioning:
+    if: github.event_name == 'workflow_dispatch' || github.ref != 'refs/heads/develop'
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [20.x]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -38,22 +38,25 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-      - name: Version handling logic
+      - name: Version handling logic and push to release
         run: |
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           VERSION=$(node -p "require('./package.json').version")
 
           if [[ "$BRANCH_NAME" == "master" ]]; then
-            # Increment minor version for master
             npm version minor
           elif [[ "$BRANCH_NAME" == "develop" ]]; then
-            # Increment prerelease version for develop
             npm version prerelease --preid=dev
-          elif [[ "$BRANCH_NAME" =~ ^release/ ]]; then
-            # Increment patch version for release branches
-            npm version patch
           elif [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
             echo "Feature branch $BRANCH_NAME was pushed. Version remains at $VERSION."
+            exit 0
           fi
 
-          git push origin HEAD:$BRANCH_NAME --tags
+          # Update version on the original branch before switching
+          git push origin $BRANCH_NAME
+
+          # Create a new release branch or switch to it if it already exists
+          git checkout -b release-${VERSION} 2>/dev/null || git checkout release-${VERSION}
+
+          # Push the release branch
+          git push origin release-${VERSION}
