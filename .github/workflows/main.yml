@@ -6,10 +6,14 @@ on:
       - master
       - develop
       - release/*
+      - feature/*
 
 jobs:
   versioning:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
 
     strategy:
       matrix:
@@ -18,6 +22,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -41,6 +47,8 @@ jobs:
           elif [[ "$BRANCH_NAME" =~ ^release/ ]]; then
             # Increment patch version for release branches
             npm version patch
+          elif [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
+            echo "Feature branch $BRANCH_NAME was pushed. Version remains at $VERSION."
           fi
 
           git config user.name "GitHub Actions"
