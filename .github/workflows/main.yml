@@ -6,6 +6,7 @@ on:
       - master
       - develop
       - release/*
+      - feature/*
 
 jobs:
   versioning:
@@ -41,6 +42,8 @@ jobs:
           elif [[ "$BRANCH_NAME" =~ ^release/ ]]; then
             # Increment patch version for release branches
             npm version patch
+          elif [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
+            echo "Feature branch $BRANCH_NAME was pushed. Version remains at $VERSION."
           fi
 
           git config user.name "GitHub Actions"
