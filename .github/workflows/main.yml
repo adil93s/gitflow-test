@@ -70,6 +70,10 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
+      - name: Update local branch
+        run: |
+          git pull origin ${BRANCH_NAME} --rebase
+
       - name: Version handling
         run: |
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
@@ -87,7 +91,6 @@ jobs:
           git push origin $BRANCH_NAME
 
   deploy_release:
-    if: github.event_name == 'workflow_dispatch'
     needs: package
     runs-on: ubuntu-latest
     environment:
