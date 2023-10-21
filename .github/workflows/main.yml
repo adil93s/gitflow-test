@@ -108,6 +108,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: Set Git Bot
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
       - name: Deploy to Release
         run: |
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
