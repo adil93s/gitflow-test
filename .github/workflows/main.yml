@@ -113,11 +113,11 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-      - name: Deploy to Release
+      - name: Create and Push Release Branch
         run: |
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          VERSION=$(node -p "require('./package.json').version")
-
           npm version patch
-          git checkout -b release-${VERSION} 2>/dev/null || git checkout release-${VERSION}
-          git push origin release-${VERSION}
+          VERSION=$(node -p "require('./package.json').version")
+          RELEASE_BRANCH="release/${VERSION}"
+
+          git checkout -b ${RELEASE_BRANCH} 2>/dev/null || git checkout -b ${RELEASE_BRANCH}
+          git push origin ${RELEASE_BRANCH}
