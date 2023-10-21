@@ -76,6 +76,7 @@ jobs:
 
       - name: Version handling
         run: |
+          git pull
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           VERSION=$(node -p "require('./package.json').version")
 
