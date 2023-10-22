@@ -81,7 +81,7 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
 
           if [[ "$BRANCH_NAME" == "develop" ]]; then
-            npm version prerelease --preid=dev
+            npm version patch
           elif [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
             npm version prerelease --preid=snapshot
           fi
@@ -116,11 +116,6 @@ jobs:
         run: |
           git checkout develop
           git pull origin develop --rebase
-
-      - name: Create New Version
-        run: |
-          npm version patch
-          git push origin develop
 
       - name: Create Release Branch
         run: |
