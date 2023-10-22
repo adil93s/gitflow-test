@@ -1,4 +1,5 @@
 name: CI/CD Pipeline
+# Pipeline by Adil CHETOUANI
 
 on:
   push:
@@ -88,6 +89,7 @@ jobs:
             exit 0
           fi
 
+          git tag -a v$VERSION -m "Version $VERSION"
           git push origin $BRANCH_NAME
 
   deploy_release:
@@ -118,11 +120,15 @@ jobs:
           git checkout develop
           git pull origin develop --rebase
 
-      - name: Create and Push Release Branch
+      - name: Create New Version
         run: |
           npm version patch
           git push origin develop
           VERSION=$(node -p "require('./package.json').version")
+
+      - name: Create Release Branch
+        run: |
           RELEASE_BRANCH="release/$VERSION"
           git checkout -b $RELEASE_BRANCH develop
+          git tag -a v$VERSION -m "Version $VERSION"
           git push origin $RELEASE_BRANCH
