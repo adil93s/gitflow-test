@@ -121,7 +121,7 @@ jobs:
       - name: Create and Push Release Branch
         run: |
           npm version patch
-          git push origin $BRANCH_NAME
+          git push origin develop
           VERSION=$(node -p "require('./package.json').version")
           RELEASE_BRANCH="release/$VERSION"
           git checkout -b $RELEASE_BRANCH develop
