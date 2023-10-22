@@ -81,7 +81,6 @@ jobs:
             npm version prerelease --preid=snapshot
           fi
 
-          git tag -a v$VERSION -m "Version $VERSION"
           git push origin $BRANCH_NAME --tags
 
   deploy_release:
@@ -117,5 +116,4 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           RELEASE_BRANCH="release/$VERSION"
           git checkout -b $RELEASE_BRANCH develop
-          git tag -a v$VERSION -m "Version $VERSION"
           git push origin $RELEASE_BRANCH --tags
