@@ -80,13 +80,10 @@ jobs:
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           VERSION=$(node -p "require('./package.json').version")
 
-          if [[ "$BRANCH_NAME" == "master" ]]; then
-            npm version minor
-          elif [[ "$BRANCH_NAME" == "develop" ]]; then
+          if [[ "$BRANCH_NAME" == "develop" ]]; then
             npm version prerelease --preid=dev
           elif [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
-            echo "Feature branch $BRANCH_NAME was pushed. Version remains at $VERSION."
-            exit 0
+            npm version prerelease --preid=snapshot
           fi
 
           git tag -a v$VERSION -m "Version $VERSION"
