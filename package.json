@@ -1,6 +1,6 @@
 {
   "name": "gitflow-test",
-  "version": "0.0.1-dev.11",
+  "version": "0.0.1-dev.12",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
