@@ -118,13 +118,10 @@ jobs:
           git checkout develop
           git pull origin develop --rebase
 
-      - name: Run npm version patch and get updated version
+      - name: Create and Push Release Branch
         run: |
           npm version patch
           VERSION=$(node -p "require('./package.json').version")
-
-      - name: Create and Push Release Branch
-        run: |
           RELEASE_BRANCH="release/$VERSION"
           git checkout -b $RELEASE_BRANCH develop
           git push origin $RELEASE_BRANCH
