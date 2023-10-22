@@ -67,6 +67,7 @@ jobs:
 
       - name: Update local branch
         run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
           git pull origin ${BRANCH_NAME} --rebase
 
       - name: Version handling
