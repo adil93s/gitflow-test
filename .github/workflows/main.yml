@@ -76,7 +76,6 @@ jobs:
 
       - name: Version handling
         run: |
-          git pull
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           VERSION=$(node -p "require('./package.json').version")
 
@@ -114,12 +113,20 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
+      - name: Update local branch
+        run: |
+          git checkout develop
+          git pull origin develop --rebase
+
+      - name: Merge develop into release branch
+        run: |
+          git checkout -b release-branch
+          git merge develop
+
       - name: Create and Push Release Branch
         run: |
-          git pull
           npm version patch
           VERSION=$(node -p "require('./package.json').version")
           RELEASE_BRANCH="release/${VERSION}"
-
-          git checkout -b ${RELEASE_BRANCH} 2>/dev/null || git checkout -b ${RELEASE_BRANCH}
+          git checkout -b ${RELEASE_BRANCH}
           git push origin ${RELEASE_BRANCH}
