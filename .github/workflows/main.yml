@@ -82,7 +82,7 @@ jobs:
           fi
 
           git tag -a v$VERSION -m "Version $VERSION"
-          git push origin $BRANCH_NAME
+          git push origin $BRANCH_NAME --tags
 
   deploy_release:
     needs: package
@@ -118,4 +118,4 @@ jobs:
           RELEASE_BRANCH="release/$VERSION"
           git checkout -b $RELEASE_BRANCH develop
           git tag -a v$VERSION -m "Version $VERSION"
-          git push origin $RELEASE_BRANCH
+          git push origin $RELEASE_BRANCH --tags
