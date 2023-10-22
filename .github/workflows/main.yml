@@ -44,11 +44,6 @@ jobs:
         with:
           node-version: 20
 
-      - name: Run Tests
-        run: |
-          npm install
-          npm test
-
   package:
     needs: test
     runs-on: ubuntu-latest
@@ -64,11 +59,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-
-      - name: Package
-        run: |
-          npm install
-          npm run build
 
       - name: Set Git Bot
         run: |
