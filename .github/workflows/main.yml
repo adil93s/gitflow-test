@@ -124,10 +124,10 @@ jobs:
         run: |
           npm version patch
           git push origin develop
-          VERSION=$(node -p "require('./package.json').version")
 
       - name: Create Release Branch
         run: |
+          VERSION=$(node -p "require('./package.json').version")
           RELEASE_BRANCH="release/$VERSION"
           git checkout -b $RELEASE_BRANCH develop
           git tag -a v$VERSION -m "Version $VERSION"
