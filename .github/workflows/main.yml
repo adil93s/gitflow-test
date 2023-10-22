@@ -68,8 +68,8 @@ jobs:
 
       - name: Set Git Bot
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+          git config user.name "Adil Bot"
+          git config user.email "onizuka9361@gmail.com"
 
       - name: Update local branch
         run: |
@@ -109,8 +109,8 @@ jobs:
 
       - name: Set Git Bot
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+          git config user.name "Adil Bot"
+          git config user.email "onizuka9361@gmail.com"
 
       - name: Update local branch
         run: |
