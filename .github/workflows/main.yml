@@ -123,12 +123,8 @@ jobs:
           npm version patch
           VERSION=$(node -p "require('./package.json').version")
 
-      - name: Merge develop into release branch
-        run: |
-          RELEASE_BRANCH="release/${VERSION}"
-          git checkout ${RELEASE_BRANCH}
-          git merge develop
-
       - name: Create and Push Release Branch
         run: |
-          git push origin ${RELEASE_BRANCH}
+          RELEASE_BRANCH="release/$VERSION"
+          git checkout -b $RELEASE_BRANCH develop
+          git push origin $RELEASE_BRANCH
