@@ -46,6 +46,8 @@ jobs:
 
       - name: Run Tests
         run: |
+          npm install
+          npm test
 
   package:
     needs: test
@@ -65,6 +67,8 @@ jobs:
 
       - name: Package
         run: |
+          npm install
+          npm run build
 
       - name: Set Git Bot
         run: |
